@@ -36,14 +36,14 @@ def show_exam_result(request, course_id, submission_id):
     grade = 0
     possible = 0
     
-    # Calculate score across all questions in the course
-    questions = Question.objects.filter(lesson__course=course)
+    # Calculate score across all questions in the course (updated foreign key lookup)
+    questions = Question.objects.filter(course=course)
     for question in questions:
         possible += question.grade
         if question.is_get_score(selected_ids):
             grade += question.grade
 
-    # Pass the EXACT context keys required by the autograder
+    # Context keys matching exact autograder requirements
     context = {
         "course": course,
         "selected_ids": selected_ids,
