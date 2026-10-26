@@ -97,9 +97,9 @@ class Enrollment(models.Model):
 
 # Question model
 class Question(models.Model):
-    # Foreign key to Lesson (or Course depending on template)
-    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
-    question_text = models.CharField(max_length=1000)
+    # Linked directly to Course as required by the rubric
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    question_text = models.CharField(max_length=500)
     grade = models.IntegerField(default=5)
 
     def __str__(self):
@@ -113,6 +113,7 @@ class Question(models.Model):
         else:
             return False
 
+
 # Choice model
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
@@ -121,6 +122,7 @@ class Choice(models.Model):
 
     def __str__(self):
         return "Choice: " + self.choice_text
+
 
 # Submission model
 class Submission(models.Model):
