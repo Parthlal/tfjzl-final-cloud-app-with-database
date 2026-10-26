@@ -97,12 +97,13 @@ class Enrollment(models.Model):
 
 # Question model
 class Question(models.Model):
+    # Foreign key to Lesson (or Course depending on template)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
-    content = models.CharField(max_length=1000)
+    question_text = models.CharField(max_length=1000)
     grade = models.IntegerField(default=5)
 
     def __str__(self):
-        return "Question: " + self.content
+        return "Question: " + self.question_text
 
     def is_get_score(self, selected_ids):
         all_answers = self.choice_set.filter(is_correct=True).count()
@@ -115,16 +116,19 @@ class Question(models.Model):
 # Choice model
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    content = models.CharField(max_length=500)
+    choice_text = models.CharField(max_length=200)
     is_correct = models.BooleanField(default=False)
 
     def __str__(self):
-        return "Choice: " + self.content
+        return "Choice: " + self.choice_text
 
 # Submission model
 class Submission(models.Model):
     enrollment = models.ForeignKey(Enrollment, on_delete=models.CASCADE)
     choices = models.ManyToManyField(Choice)
+
+    def __str__(self):
+        return "Enrollment: " + str(self.enrollment.id) + " Submission: " + str(self.id)
 # <HINT> Create a Question Model with:
     # Used to persist question content for a course
     # Has a One-To-Many (or Many-To-Many if you want to reuse questions) relationship with course
